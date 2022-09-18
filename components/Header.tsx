@@ -1,11 +1,21 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, useToast } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
 import { MealSchedule } from "../pages";
 type HeaderProps = {
   mealSchedule: MealSchedule;
 };
 const Header = (props: HeaderProps) => {
-  const changeMode = () => {};
+  const toast = useToast();
+  const handleClick = () => {
+    console.log(props.mealSchedule);
+    setTimeout(() => {
+      toast({
+        title: "保存しました",
+        status: "success",
+        duration: 2000,
+      });
+    }, 2000);
+  };
   const IconStyle = {
     color: "white",
     w: "16",
@@ -20,7 +30,7 @@ const Header = (props: HeaderProps) => {
       borderRadius={"3px"}
     >
       <button
-        onClick={changeMode}
+        onClick={handleClick}
         style={{ display: "flex", alignItems: "center", paddingRight: "1rem" }}
       >
         <CheckIcon style={IconStyle} />
