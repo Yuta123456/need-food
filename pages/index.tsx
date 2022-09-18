@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Header from "../components/Header";
 import MealCheckboxGroup from "../components/MealCheckboxGroup";
-import ModeFab from "../components/ModeFab";
 import dummyData from "../data/dummyData";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -18,7 +17,6 @@ const Home = () => {
         mealSchedule={mealSchedule}
         setMealSchedule={setMealSchedule}
       />
-      {/* <ModeFab /> */}
     </>
   );
 };

@@ -1,22 +1,11 @@
-import { Box, Button, Center, IconButton, Text } from "@chakra-ui/react";
-import { useContext } from "react";
-import { modeContext } from "../context/mode";
-import { EditIcon, CheckIcon } from "@chakra-ui/icons";
+import { Box, Text } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
 import { MealSchedule } from "../pages";
 type HeaderProps = {
   mealSchedule: MealSchedule;
 };
 const Header = (props: HeaderProps) => {
-  const ctx = useContext(modeContext);
-  const changeMode = () => {
-    if (ctx.isView) {
-      ctx.setIsView(false);
-    } else {
-      // ここに保存処理
-      console.log(props.mealSchedule);
-      ctx.setIsView(true);
-    }
-  };
+  const changeMode = () => {};
   const IconStyle = {
     color: "white",
     w: "16",
@@ -41,8 +30,5 @@ const Header = (props: HeaderProps) => {
       </button>
     </Box>
   );
-};
-const child = () => {
-  return <Text color="white">編集する</Text>;
 };
 export default Header;
