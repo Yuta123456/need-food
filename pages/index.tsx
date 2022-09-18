@@ -1,16 +1,34 @@
-import useSWR from "swr";
-import styles from "../styles/Home.module.css";
-
+import { useState } from "react";
+import Header from "../components/Header";
+import MealCheckboxGroup from "../components/MealCheckboxGroup";
+import ModeFab from "../components/ModeFab";
+import dummyData from "../data/dummyData";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
-    console.log(res);
     return res.json();
   });
+
 const Home = () => {
-  const { data, error } = useSWR("/api/hello", fetcher);
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
-  return <div className={styles.container}>{data.name}</div>;
+  // const { data, error } = useSWR("/api/hello", fetcher);
+  const [mealSchedule, setMealSchedule] = useState<MealSchedule>(dummyData);
+  return (
+    <>
+      <Header mealSchedule={mealSchedule} />
+      <MealCheckboxGroup
+        mealSchedule={mealSchedule}
+        setMealSchedule={setMealSchedule}
+      />
+      {/* <ModeFab /> */}
+    </>
+  );
 };
 
+export type MealSchedule = {
+  [date: string]: DayMeal;
+};
+export type DayMeal = {
+  breakFast: boolean;
+  lunch: boolean;
+  dinner: boolean;
+};
 export default Home;
