@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MealCheckboxGroup from "../components/MealCheckboxGroup";
-import dummyData from "../data/dummyData";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { auth } from "../FirebaseConfig";
-import { User } from "firebase/auth";
 import Login from "./login";
 import { atom, useRecoilState } from "recoil";
 const fetcher = (url: string) =>
@@ -14,11 +10,20 @@ const fetcher = (url: string) =>
 
 const Home = () => {
   // const { data, error } = useSWR("/api/hello", fetcher);
-  const [mealSchedule, setMealSchedule] = useState<MealSchedule>(dummyData);
+  const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [isLogin, _] = useRecoilState(loginState);
+  useEffect(() => {
+    fetch("/api/v1/load").then(async (res) => {
+      const mealJson = await res.json();
+      setMealSchedule(mealJson.mealSchedule);
+    });
+  }, []);
+  if (!isLogin) {
+    return <Login />;
+  }
   return (
     <>
-      {isLogin ? (
+      {mealSchedule !== null ? (
         <>
           <Header mealSchedule={mealSchedule} />
           <MealCheckboxGroup
@@ -27,7 +32,7 @@ const Home = () => {
           />
         </>
       ) : (
-        <Login />
+        <p>loading</p>
       )}
     </>
   );

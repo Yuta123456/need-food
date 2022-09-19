@@ -7,14 +7,26 @@ type HeaderProps = {
 const Header = (props: HeaderProps) => {
   const toast = useToast();
   const handleClick = () => {
-    console.log(props.mealSchedule);
-    setTimeout(() => {
-      toast({
-        title: "保存しました",
-        status: "success",
-        duration: 2000,
+    fetch("/api/v1/save", {
+      method: "POST",
+      // TODO: ID設定
+      body: JSON.stringify({ mealSchedule: props.mealSchedule, userId: "abs" }),
+    })
+      .then(() => {
+        toast({
+          title: "保存しました",
+          status: "success",
+          duration: 2000,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        toast({
+          title: "保存に失敗しました",
+          status: "error",
+          duration: 2000,
+        });
       });
-    }, 2000);
   };
   const IconStyle = {
     color: "white",

@@ -9,10 +9,9 @@ import { auth } from "../FirebaseConfig.js";
 import { loginState } from "./index";
 import { useRecoilState } from "recoil";
 const Login = () => {
-  const [isRegister, setIsRegister] = useState(true);
+  const [isRegister, setIsRegister] = useState(false);
   const [_, setIsLogin] = useRecoilState(loginState);
   const handleSubmit = async () => {
-    console.log(emailRef.current?.value, passwordRef.current?.value);
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     if (!email || !password) {
@@ -22,7 +21,6 @@ const Login = () => {
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          console.log("resister successed", value);
           setIsLogin(true);
         })
         .catch((err) => {
@@ -31,7 +29,6 @@ const Login = () => {
     } else {
       signInWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          console.log("login successed", value);
           setIsLogin(true);
         })
         .catch((err) => {
@@ -55,9 +52,16 @@ const Login = () => {
             isRequired
             ref={emailRef}
             color="White"
+            value="yuuta09090530@icloud.com"
           />
           <FormLabel color="white">Password</FormLabel>
-          <Input type="password" isRequired ref={passwordRef} color="White" />
+          <Input
+            type="password"
+            isRequired
+            ref={passwordRef}
+            color="White"
+            value="Yuuta0909"
+          />
           <Button mt={4} onClick={handleSubmit}>
             Login
           </Button>
