@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MealCheckboxGroup from "../components/MealCheckboxGroup";
 import Login from "./login";
-import { atom, useRecoilState } from "recoil";
+import { atom, RecoilState, useRecoilState } from "recoil";
+import { User } from "firebase/auth";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
@@ -11,14 +12,24 @@ const fetcher = (url: string) =>
 const Home = () => {
   // const { data, error } = useSWR("/api/hello", fetcher);
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
-  const [isLogin, _] = useRecoilState(loginState);
+  const [user, _] = useRecoilState(userState);
   useEffect(() => {
-    fetch("/api/v1/load").then(async (res) => {
-      const mealJson = await res.json();
-      setMealSchedule(mealJson.mealSchedule);
-    });
-  }, []);
-  if (!isLogin) {
+    if (!user) {
+      return;
+    }
+    fetch(`/api/v1/load/${user.uid}`, {
+      method: "GET",
+    })
+      .then(async (res) => {
+        const mealJson = await res.json();
+        setMealSchedule(mealJson.mealSchedule);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [user]);
+
+  if (!user) {
     return <Login />;
   }
   return (
@@ -46,8 +57,8 @@ export type DayMeal = {
   lunch: boolean;
   dinner: boolean;
 };
-export const loginState = atom({
-  key: "loginState", // unique ID (with respect to other atoms/selectors)
-  default: false, // default value (aka initial value)
+export const userState = atom<User>({
+  key: "userState", // unique ID (with respect to other atoms/selectors)
+  default: undefined, // default value (aka initial value)
 });
 export default Home;

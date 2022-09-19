@@ -6,11 +6,11 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../FirebaseConfig.js";
-import { loginState } from "./index";
+import { userState } from "./index";
 import { useRecoilState } from "recoil";
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
-  const [_, setIsLogin] = useRecoilState(loginState);
+  const [_, setIsLogin] = useRecoilState(userState);
   const handleSubmit = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -21,7 +21,7 @@ const Login = () => {
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          setIsLogin(true);
+          setIsLogin(value.user);
         })
         .catch((err) => {
           console.log("error", err);
@@ -29,7 +29,8 @@ const Login = () => {
     } else {
       signInWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          setIsLogin(true);
+          console.log(value);
+          setIsLogin(value.user);
         })
         .catch((err) => {
           console.log("error", err);

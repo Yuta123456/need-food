@@ -1,16 +1,21 @@
 import { Box, Text, useToast } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-import { MealSchedule } from "../pages";
+import { userState, MealSchedule } from "../pages";
+import { useRecoilState } from "recoil";
 type HeaderProps = {
   mealSchedule: MealSchedule;
 };
 const Header = (props: HeaderProps) => {
   const toast = useToast();
+  const [user, _] = useRecoilState(userState);
   const handleClick = () => {
     fetch("/api/v1/save", {
       method: "POST",
       // TODO: ID設定
-      body: JSON.stringify({ mealSchedule: props.mealSchedule, userId: "abs" }),
+      body: JSON.stringify({
+        mealSchedule: props.mealSchedule,
+        userId: user.uid,
+      }),
     })
       .then(() => {
         toast({
