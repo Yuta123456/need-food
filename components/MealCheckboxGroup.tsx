@@ -5,7 +5,7 @@ import DayCheckbox from "./DayCheckbox";
 
 type MealCheckboxProps = {
   mealSchedule: MealSchedule;
-  setMealSchedule: Dispatch<SetStateAction<MealSchedule>>;
+  setMealSchedule: Dispatch<SetStateAction<MealSchedule | null>>;
 };
 const MealCheckboxGroup = (props: MealCheckboxProps) => {
   const week = [...Array(7)]
@@ -14,7 +14,7 @@ const MealCheckboxGroup = (props: MealCheckboxProps) => {
       today.setDate(today.getDate() + index);
       return today;
     })
-    .map((day) => formatDate(day, "MM/dd"));
+    .map((day) => formatDate(day, "MM-dd"));
   return (
     <div>
       {week.map((day) => {

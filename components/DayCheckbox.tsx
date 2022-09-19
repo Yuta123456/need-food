@@ -7,7 +7,7 @@ import Night from "../icon/Night";
 type DayCheckboxProps = {
   day: string;
   mealSchedule: MealSchedule;
-  setMealSchedule: Dispatch<SetStateAction<MealSchedule>>;
+  setMealSchedule: Dispatch<SetStateAction<MealSchedule | null>>;
 };
 type IconColor = {
   morning: string;
