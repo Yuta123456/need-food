@@ -4,6 +4,8 @@ import MealCheckboxGroup from "../components/MealCheckboxGroup";
 import Login from "./login";
 import { atom, RecoilState, useRecoilState } from "recoil";
 import { User } from "firebase/auth";
+import isAdmin from "../util/isAdmin";
+import { useRouter } from "next/router";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
@@ -13,6 +15,8 @@ const Home = () => {
   // const { data, error } = useSWR("/api/hello", fetcher);
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [user, _] = useRecoilState(userState);
+  const [isAdminUser, setIsAdminUser] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     if (!user) {
       return;
@@ -29,9 +33,21 @@ const Home = () => {
       });
   }, [user]);
 
-  if (!user) {
-    return <Login />;
-  }
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    setIsAdminUser(isAdmin(user.uid));
+  }, [user]);
+
+  useEffect(() => {
+    if (user === undefined) {
+      router.push("/login");
+    }
+    if (isAdminUser) {
+      router.push("/admin");
+    }
+  }, [user, router, isAdminUser]);
   return (
     <>
       {mealSchedule !== null ? (
@@ -43,7 +59,7 @@ const Home = () => {
           />
         </>
       ) : (
-        <p>loading</p>
+        <p>loading...</p>
       )}
     </>
   );
