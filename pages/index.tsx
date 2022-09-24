@@ -26,6 +26,7 @@ const Home = () => {
     })
       .then(async (res) => {
         const mealJson = await res.json();
+        console.log(mealJson);
         setMealSchedule(mealJson.mealSchedule);
       })
       .catch((err) => {

@@ -16,14 +16,18 @@ export default function handler(
   const { userId } = req.query;
   const starCountRef = ref(db, "users/" + userId);
   onValue(starCountRef, (snapshot) => {
-    if (!snapshot.val()) {
-      // データが無い場合は、デフォルトを返してあげる。
-      res.status(200).json({
-        mealSchedule: defaultMealSchedule(),
-      });
-    } else {
-      res.status(200).json(snapshot.val());
-    }
+    res.status(200).json({
+      mealSchedule: defaultMealSchedule(),
+    });
+    // if (!snapshot.val()) {
+    //   // データが無い場合は、デフォルトを返してあげる。
+    //   // TODO: 一週間分のデータがあるかどうか確認
+    //   res.status(200).json({
+    //     mealSchedule: defaultMealSchedule(),
+    //   });
+    // } else {
+    //   res.status(200).json(snapshot.val());
+    // }
   });
 }
 
@@ -35,7 +39,7 @@ const defaultMealSchedule = () => {
       today.setDate(today.getDate() + index);
       return today;
     })
-    .map((day) => formatDate(day, "MM-dd"))
+    .map((day) => formatDate(day, "yyyy-MM-dd"))
     .forEach((day) => {
       mealSchedule[day] = {
         breakFast: true,

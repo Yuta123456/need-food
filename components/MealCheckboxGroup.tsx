@@ -14,7 +14,7 @@ const MealCheckboxGroup = (props: MealCheckboxProps) => {
       today.setDate(today.getDate() + index);
       return today;
     })
-    .map((day) => formatDate(day, "MM-dd"));
+    .map((day) => formatDate(day, "yyyy-MM-dd"));
   return (
     <div>
       {week.map((day) => {
