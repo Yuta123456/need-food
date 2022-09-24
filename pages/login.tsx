@@ -8,9 +8,11 @@ import {
 import { auth } from "../FirebaseConfig.js";
 import { userState } from "./index";
 import { useRecoilState } from "recoil";
+import { useRouter } from "next/router.js";
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [_, setIsLogin] = useRecoilState(userState);
+  const router = useRouter();
   const handleSubmit = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -22,6 +24,7 @@ const Login = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
           setIsLogin(value.user);
+          router.push("/");
         })
         .catch((err) => {
           console.log("error", err);
@@ -29,8 +32,8 @@ const Login = () => {
     } else {
       signInWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          console.log(value);
           setIsLogin(value.user);
+          router.push("/");
         })
         .catch((err) => {
           console.log("error", err);
