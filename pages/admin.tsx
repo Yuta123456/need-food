@@ -1,42 +1,45 @@
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
-import { MealSchedule } from ".";
+import { DayMeal, MealSchedule } from ".";
 import Morning from "../icon/Morning";
 import Noon from "../icon/Noon";
 import Night from "../icon/Night";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { atom, useRecoilState } from "recoil";
+import { dayCount } from "../util/schedule";
 const Admin = () => {
-  const monitorUserList = ["yuta", "miiro", "manari"];
-  const [monitorUserDict, setMonitorUserDict] = useState<{
-    [userName: string]: MealSchedule;
-  }>({});
+  const [monitorUserDict, setMonitorUserDict] = useRecoilState(
+    monitorUserScheduleState
+  );
   useEffect(() => {
-    monitorUserList.forEach((userName) => {
-      fetch(`api/v1/userIdFromName/${userName}`)
-        .then((res) => res.json())
-        .then((res) => res.userId)
-        .then((userId) => {
-          return fetch(`api/v1/load/${userId}`);
-        })
-        .then((res) => res.json())
-        .then((res) => res.mealSchedule)
-        .then((res) => {
-          const newMonitorUserDict = JSON.parse(
-            JSON.stringify(monitorUserDict)
-          );
-          monitorUserDict[userName] = res;
-          setMonitorUserDict(newMonitorUserDict);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    const monitorUserList = ["yuta", "miiro", "manari"];
+    const newMonitorUserDict: { [userName: string]: MealSchedule } = {};
+    Promise.all(
+      monitorUserList.map((userName) =>
+        fetch(`api/v1/userIdFromName/${userName}`)
+          .then((res) => res.json())
+          .then((res) => res.userId)
+          .then((userId) => {
+            return fetch(`api/v1/load/${userId}`);
+          })
+          .then((res) => res.json())
+          .then((res) => res.mealSchedule)
+          .then((res) => {
+            newMonitorUserDict[userName] = res;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      )
+    ).then(() => {
+      setMonitorUserDict(newMonitorUserDict);
     });
   }, []);
 
   return (
     <>
       <AdminHeader />
-      <FamilyStats monitorUserDict={monitorUserDict} />
+      {monitorUserDict ? <FamilyStats /> : <div>loading</div>}
     </>
   );
 };
@@ -64,18 +67,23 @@ export const AdminHeader = () => {
   );
 };
 
-type FamilyStatsProps = {
-  monitorUserDict: { [userName: string]: MealSchedule };
-};
+type FamilyStatsProps = {};
 type DayMealCount = {
   breakFast: number;
   lunch: number;
   dinner: number;
 };
-const FamilyStats = (props: FamilyStatsProps) => {
+const FamilyStats = () => {
   const dayDict: { [date: string]: DayMealCount } = {};
-  Object.keys(props.monitorUserDict).forEach((userName) => {
-    const schedule = props.monitorUserDict[userName];
+  const [dateState, setDateState] = useRecoilState(
+    monitorUserScheduleDateState
+  );
+  const [monitorUserDict, setMonitorUserDict] = useRecoilState(
+    monitorUserScheduleState
+  );
+  console.log(monitorUserDict);
+  Object.keys(monitorUserDict).forEach((userName) => {
+    const schedule = monitorUserDict[userName];
     Object.keys(schedule).forEach((date) => {
       if (!(date in dayDict)) {
         dayDict[date] = {
@@ -92,6 +100,10 @@ const FamilyStats = (props: FamilyStatsProps) => {
       };
     });
   });
+
+  useEffect(() => {
+    setDateState(dayCount(monitorUserDict));
+  }, [monitorUserDict, setDateState]);
   return (
     <>
       {Object.keys(dayDict).map((date) => {
@@ -140,4 +152,18 @@ const UserStats = (props: UserStatsProps) => {
     </Link>
   );
 };
+
+export const monitorUserScheduleState = atom<{
+  [userName: string]: MealSchedule;
+}>({
+  key: "monitorUserScheduleState",
+  default: {},
+});
+
+export const monitorUserScheduleDateState = atom<{
+  [date: string]: { [userName: string]: DayMeal };
+}>({
+  key: "monitorUserScheduleDateState",
+  default: {},
+});
 export default Admin;

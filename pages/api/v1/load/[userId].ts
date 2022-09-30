@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { MealSchedule } from "../../../index";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { formatDate } from "../../../../components/MealCheckboxGroup";
-
+import { database } from "../../../../firebase";
 type Response = {
   mealSchedule: MealSchedule;
 };
@@ -12,9 +12,8 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Response>
 ) {
-  const db = getDatabase();
   const { userId } = req.query;
-  const starCountRef = ref(db, "users/" + userId);
+  const starCountRef = ref(database, "users/" + userId);
   onValue(starCountRef, (snapshot) => {
     res.status(200).json({
       mealSchedule: defaultMealSchedule(),

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MealCheckboxGroup from "../components/MealCheckboxGroup";
-import Login from "./login";
-import { atom, RecoilState, useRecoilState } from "recoil";
+import { atom, useRecoilState } from "recoil";
 import { User } from "firebase/auth";
 import isAdmin from "../util/isAdmin";
 import { useRouter } from "next/router";
@@ -12,7 +11,6 @@ const fetcher = (url: string) =>
   });
 
 const Home = () => {
-  // const { data, error } = useSWR("/api/hello", fetcher);
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [user, _] = useRecoilState(userState);
   const [isAdminUser, setIsAdminUser] = useState(false);
@@ -26,7 +24,6 @@ const Home = () => {
     })
       .then(async (res) => {
         const mealJson = await res.json();
-        console.log(mealJson);
         setMealSchedule(mealJson.mealSchedule);
       })
       .catch((err) => {

@@ -1,7 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MealSchedule } from "../../../index";
-import { getDatabase, ref, set } from "firebase/database";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const { userName } = req.query;
