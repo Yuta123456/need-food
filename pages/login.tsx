@@ -5,10 +5,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../FirebaseConfig.js";
 import { userState } from "./index";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router.js";
+import { auth } from "../FirebaseConfig";
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [_, setIsLogin] = useRecoilState(userState);
@@ -54,17 +54,17 @@ const Login = () => {
             type="email"
             placeholder="example@hoge.com"
             isRequired
+            id="email"
             ref={emailRef}
             color="White"
-            value="yuuta09090530@icloud.com"
           />
           <FormLabel color="white">Password</FormLabel>
           <Input
             type="password"
+            id="password"
             isRequired
             ref={passwordRef}
             color="White"
-            value="Yuuta0909"
           />
           <Button mt={4} onClick={handleSubmit}>
             Login
