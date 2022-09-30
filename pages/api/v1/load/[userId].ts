@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { MealSchedule } from "../../../index";
 import { getDatabase, onValue, ref } from "firebase/database";
 import { formatDate } from "../../../../components/MealCheckboxGroup";
-import { database } from "../../../../firebase";
+import { database } from "../../firebase";
 type Response = {
   mealSchedule: MealSchedule;
 };

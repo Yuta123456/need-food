@@ -5,7 +5,7 @@ import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
 // const { initializeApp } = require("firebase-admin/app");
 
-var serviceAccount = require("./need-food-9f4ff-firebase-adminsdk-7nmb9-16675d8456.json");
+var serviceAccount = require("../../need-food-9f4ff-firebase-adminsdk-7nmb9-16675d8456.json");
 
 console.log("=================\n", getApps().length, "\n=================\n");
 export const firebase = !getApps().length
