@@ -15,11 +15,11 @@ const firebaseConfig = {
   measurementId: "G-XKMW52K8C3",
 };
 
-// // // Initialize Firebase
-// console.log("=================\n", getApps().length, "\n=================\n");
+// Initialize Firebase
+console.log("=================\n", getApps().length, "\n=================\n");
 export const firebase = !getApps().length
-  ? initializeApp(firebaseConfig)
-  : getApp();
+  ? initializeApp(firebaseConfig, "need-food")
+  : getApp("need-food");
 
 import { getAuth } from "firebase/auth";
 export const auth = getAuth(firebase);
