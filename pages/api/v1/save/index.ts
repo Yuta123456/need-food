@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MealSchedule } from "../../../index";
-import { getDatabase, ref, set } from "firebase/database";
+import { database } from "../../firebase";
 
 // type Request = {
 //   userId: string;
@@ -14,13 +15,14 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
   const { userId, mealSchedule } = JSON.parse(req.body);
+  console.log(mealSchedule, userId);
   if (!userId || !mealSchedule) {
     // TODO: 番号確認
     res.status(403).end();
     return;
   }
-  const db = getDatabase();
-  set(ref(db, "users/" + userId), {
+  const ref = database.ref("users/" + userId);
+  ref.set({
     mealSchedule,
   });
   res.status(200).end();
