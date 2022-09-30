@@ -81,7 +81,6 @@ const FamilyStats = () => {
   const [monitorUserDict, setMonitorUserDict] = useRecoilState(
     monitorUserScheduleState
   );
-  console.log(monitorUserDict);
   Object.keys(monitorUserDict).forEach((userName) => {
     const schedule = monitorUserDict[userName];
     Object.keys(schedule).forEach((date) => {

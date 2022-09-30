@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MealSchedule } from "../../../index";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { getDatabase } from "firebase/database";
 import { formatDate } from "../../../../components/MealCheckboxGroup";
 import { database } from "../../firebase";
 type Response = {
@@ -13,8 +13,8 @@ export default function handler(
   res: NextApiResponse<Response>
 ) {
   const { userId } = req.query;
-  const starCountRef = ref(database, "users/" + userId);
-  onValue(starCountRef, (snapshot) => {
+  const starCountRef = database.ref("users/" + userId);
+  starCountRef.once("value", (snapshot) => {
     res.status(200).json({
       mealSchedule: defaultMealSchedule(),
     });
@@ -46,6 +46,5 @@ const defaultMealSchedule = () => {
         dinner: true,
       };
     });
-  console.log(mealSchedule);
   return mealSchedule;
 };

@@ -16,7 +16,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-console.log("=================\n", getApps().length, "\n=================\n");
 export const firebase = !getApps().length
   ? initializeApp(firebaseConfig, "need-food")
   : getApp("need-food");
