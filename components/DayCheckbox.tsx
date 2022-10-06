@@ -25,9 +25,9 @@ const DayCheckbox = (props: DayCheckboxProps) => {
   useEffect(() => {
     const dayMeal: DayMeal = props.mealSchedule[props.day];
     setIconColor({
-      morning: dayMeal.breakFast ? "#ED8936" : "#4B4B4B",
-      noon: dayMeal.lunch ? "#FAF089" : "#4B4B4B",
-      night: dayMeal.dinner ? "#2C5282" : "#4B4B4B",
+      morning: dayMeal?.breakFast ? "#ED8936" : "#4B4B4B",
+      noon: dayMeal?.lunch ? "#FAF089" : "#4B4B4B",
+      night: dayMeal?.dinner ? "#2C5282" : "#4B4B4B",
     });
   }, [props.mealSchedule, props.day]);
 
