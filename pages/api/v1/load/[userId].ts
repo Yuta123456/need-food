@@ -15,18 +15,10 @@ export default function handler(
   const { userId } = req.query;
   const starCountRef = database.ref("users/" + userId);
   starCountRef.once("value", (snapshot) => {
+    const data = snapshot.val().mealSchedule;
     res.status(200).json({
-      mealSchedule: defaultMealSchedule(),
+      mealSchedule: transferValidData(data),
     });
-    // if (!snapshot.val()) {
-    //   // データが無い場合は、デフォルトを返してあげる。
-    //   // TODO: 一週間分のデータがあるかどうか確認
-    //   res.status(200).json({
-    //     mealSchedule: defaultMealSchedule(),
-    //   });
-    // } else {
-    //   res.status(200).json(snapshot.val());
-    // }
   });
 }
 
@@ -47,4 +39,41 @@ const defaultMealSchedule = () => {
       };
     });
   return mealSchedule;
+};
+
+const isValidData = (data: MealSchedule) => {
+  return [...Array(7)]
+    .map((_, index) => {
+      const today = new Date();
+      today.setDate(today.getDate() + index);
+      return today;
+    })
+    .map((day) => formatDate(day, "yyyy-MM-dd"))
+    .map((date) => {
+      return data[date];
+    })
+    .some((v) => !!v);
+};
+
+const transferValidData = (data: MealSchedule) => {
+  const newData: MealSchedule = {};
+  [...Array(7)]
+    .map((_, index) => {
+      const today = new Date();
+      today.setDate(today.getDate() + index);
+      return today;
+    })
+    .map((day) => formatDate(day, "yyyy-MM-dd"))
+    .forEach((date) => {
+      if (!data[date]) {
+        newData[date] = {
+          breakFast: true,
+          lunch: true,
+          dinner: true,
+        };
+      } else {
+        newData[date] = data[date];
+      }
+    });
+  return newData;
 };
