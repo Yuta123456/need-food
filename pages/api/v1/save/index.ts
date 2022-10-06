@@ -15,7 +15,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
   const { userId, mealSchedule } = JSON.parse(req.body);
-  console.log(mealSchedule, userId);
   if (!userId || !mealSchedule) {
     // TODO: 番号確認
     res.status(403).end();
