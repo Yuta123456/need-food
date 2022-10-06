@@ -12,7 +12,8 @@ const Admin = () => {
     monitorUserScheduleState
   );
   useEffect(() => {
-    const monitorUserList = ["yuta", "miiro", "manari"];
+    // const monitorUserList = ["yuta", "miiro", "manari"];
+    const monitorUserList = ["yuta", "miiro"];
     const newMonitorUserDict: { [userName: string]: MealSchedule } = {};
     Promise.all(
       monitorUserList.map((userName) =>

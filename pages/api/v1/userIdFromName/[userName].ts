@@ -9,10 +9,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res.status(200).json({ userId: "gaECP3LFM7cfCXNHK5k297kt1kD3" });
       break;
     case "miiro":
-      res.status(200).json({ userId: "gaECP3LFM7cfCXNHK5k297kt1kD3" });
+      res.status(200).json({ userId: "CRYl4m5uMQYqVFeMfs4jBW4fNxq1" });
       break;
-    case "manari":
-      res.status(200).json({ userId: "gaECP3LFM7cfCXNHK5k297kt1kD3" });
-      break;
+    // case "manari":
+    //   res.status(200).json({ userId: "gaECP3LFM7cfCXNHK5k297kt1kD3" });
+    //   break;
   }
 }

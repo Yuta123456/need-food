@@ -20,7 +20,8 @@ export const dayCount = (monitorUserScheduleState: {
 };
 
 export const fetchUserData = () => {
-  const monitorUserList = ["yuta", "miiro", "manari"];
+  // const monitorUserList = ["yuta", "miiro", "manari"];
+  const monitorUserList = ["yuta", "miiro"];
   const newMonitorUserDict: { [userName: string]: MealSchedule } = {};
   Promise.all(
     monitorUserList.map((userName) => {
