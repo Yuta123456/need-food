@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Center, Grid, GridItem, Text } from "@chakra-ui/react";
 import { DayMeal, MealSchedule } from ".";
 import Morning from "../icon/Morning";
 import Noon from "../icon/Noon";
@@ -49,13 +49,7 @@ const Admin = () => {
 export const AdminHeader = () => {
   // TODO: UI改善
   return (
-    <Box
-      bg="teal.300"
-      h="5rem"
-      display={"flex"}
-      justifyContent={"left"}
-      borderRadius={"3px"}
-    >
+    <Center bg="teal.300" h="5rem" display={"flex"} borderRadius={"3px"}>
       <Text
         color="white"
         display={"flex"}
@@ -65,7 +59,7 @@ export const AdminHeader = () => {
       >
         Admin
       </Text>
-    </Box>
+    </Center>
   );
 };
 
