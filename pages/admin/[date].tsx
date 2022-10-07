@@ -1,4 +1,17 @@
-import { Box, Button, Center, Grid, GridItem, Text } from "@chakra-ui/react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+} from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Center,
+  Grid,
+  GridItem,
+  IconButton,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -19,18 +32,26 @@ const DaySchedule = () => {
       <Header />
       <Box>
         <Center h={"2rem"}>
-          <Button
+          <IconButton
             onClick={() => router.push(`/admin/${prevDate(date)}`)}
             disabled={!dateState[prevDate(date)]}
-          ></Button>
+            aria-label="Search database"
+            icon={<ChevronLeftIcon />}
+            size="sm"
+            bgColor={"white"}
+          ></IconButton>
           {date}
-          <Button
+          <IconButton
             onClick={() => router.push(`/admin/${nextDate(date)}`)}
             disabled={!dateState[nextDate(date)]}
-          ></Button>
+            aria-label="Search database"
+            icon={<ChevronRightIcon />}
+            size="sm"
+            bgColor={"white"}
+          ></IconButton>
         </Center>
       </Box>
-      <Box>
+      <Center flexFlow={"column"}>
         {Object.keys(dateState[date]).map((userName) => {
           const dayMeal = dateState[date][userName];
           const iconColor = {
@@ -42,27 +63,28 @@ const DaySchedule = () => {
             <Grid
               key={userName}
               h={"3rem"}
-              templateColumns="repeat(5, 1fr)"
+              templateColumns="repeat(4, 1fr)"
               gap={4}
               paddingTop={"1rem"}
               paddingLeft={"1rem"}
+              width="100%"
             >
-              <GridItem>
+              <GridItem colSpan={1}>
                 <Text> {userName}</Text>
               </GridItem>
-              <GridItem display={"flex"} alignItems={"center"}>
+              <GridItem display={"flex"} alignItems={"center"} colSpan={1}>
                 <Morning color={iconColor.morning} size="24" />
               </GridItem>
-              <GridItem display={"flex"} alignItems={"center"}>
+              <GridItem display={"flex"} alignItems={"center"} colSpan={1}>
                 <Noon color={iconColor.noon} size="24" />
               </GridItem>
-              <GridItem display={"flex"} alignItems={"center"}>
+              <GridItem display={"flex"} alignItems={"center"} colSpan={1}>
                 <Night color={iconColor.night} size="24" />
               </GridItem>
             </Grid>
           );
         })}
-      </Box>
+      </Center>
     </>
   );
 };
@@ -98,6 +120,16 @@ type BackButtonProps = {
 };
 const BackButton = (props: BackButtonProps) => {
   // UI改善
-  return <Button onClick={props.onClick}>{"<"}</Button>;
+  return (
+    <Button
+      leftIcon={<ChevronLeftIcon />}
+      onClick={props.onClick}
+      aria-label="Search database"
+      bgColor={"teal.300"}
+      color={"white"}
+    >
+      Back
+    </Button>
+  );
 };
 export default DaySchedule;
