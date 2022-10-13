@@ -1,9 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MealSchedule } from "../../../index";
-import { getDatabase } from "firebase/database";
 import { formatDate } from "../../../../components/MealCheckboxGroup";
-import { database } from "../../firebase";
+import { database } from "../../../../firebaseAdmin";
 type Response = {
   mealSchedule: MealSchedule;
 };

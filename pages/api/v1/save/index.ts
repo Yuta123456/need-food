@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { MealSchedule } from "../../../index";
-import { database } from "../../firebase";
+import { database } from "../../../../firebaseAdmin";
 
 // type Request = {
 //   userId: string;

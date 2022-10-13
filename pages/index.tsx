@@ -2,19 +2,27 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MealCheckboxGroup from "../components/MealCheckboxGroup";
 import { atom, useRecoilState } from "recoil";
-import { User } from "firebase/auth";
+import { User } from "../models/user";
 import isAdmin from "../util/isAdmin";
 import { useRouter } from "next/router";
+import { auth as adminAuth } from "../firebaseAdmin";
+import nookies from "nookies";
+import { GetServerSideProps, NextPage } from "next";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
   });
 
-const Home = () => {
+const Home: NextPage<{ uid: string }> = ({ uid }) => {
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
-  const [user, _] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const [isAdminUser, setIsAdminUser] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setUser({ uid });
+  }, [uid]);
+
   useEffect(() => {
     if (!user) {
       return;
@@ -45,7 +53,7 @@ const Home = () => {
     if (isAdminUser) {
       router.push("/admin");
     }
-  }, [user, router, isAdminUser]);
+  }, [user, isAdminUser]);
   return (
     <>
       {mealSchedule !== null ? (
@@ -75,4 +83,29 @@ export const userState = atom<User>({
   key: "userState", // unique ID (with respect to other atoms/selectors)
   default: undefined, // default value (aka initial value)
 });
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = nookies.get(ctx);
+  const session = cookies.__session || "";
+
+  // セッションIDを検証して、認証情報を取得する
+  const user = await adminAuth
+    .verifySessionCookie(session, true)
+    .catch(() => null);
+
+  // 認証情報が無い場合は、ログイン画面へ遷移させる
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      uid: user.uid,
+    },
+  };
+};
 export default Home;

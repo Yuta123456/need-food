@@ -1,18 +1,38 @@
 import { Center, Input, Button, Heading, Text } from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  User,
 } from "firebase/auth";
 import { userState } from "./index";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router.js";
+import { auth as adminAuth } from "../firebaseAdmin";
 import { auth } from "../FirebaseConfig";
+import nookies, { parseCookies } from "nookies";
+import { GetServerSideProps } from "next";
+
+const createSession = (id: string) => {
+  fetch("/api/v1/login/createSession", {
+    method: "POST",
+    body: JSON.stringify({ id }),
+  }).catch((err) => {
+    console.log(err);
+  });
+};
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
-  const [_, setIsLogin] = useRecoilState(userState);
+  const [user, setIsLogin] = useRecoilState(userState);
   const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
+
   const handleSubmit = async () => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
@@ -23,7 +43,8 @@ const Login = () => {
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
-          setIsLogin(value.user);
+          setIsLogin({ uid: value.user.uid });
+          value.user.getIdToken().then((id) => createSession(id));
           router.push("/");
         })
         .catch((err) => {
@@ -31,8 +52,10 @@ const Login = () => {
         });
     } else {
       signInWithEmailAndPassword(auth, email, password)
-        .then((value) => {
-          setIsLogin(value.user);
+        .then(async (value) => {
+          const id = await value.user.getIdToken();
+          setIsLogin({ uid: value.user.uid });
+          value.user.getIdToken().then((id) => createSession(id));
           router.push("/");
         })
         .catch((err) => {
