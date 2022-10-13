@@ -3,6 +3,7 @@ import { getApp, getApps, ServiceAccount } from "firebase-admin/app";
 import { getDatabase } from "firebase-admin/database";
 import { initializeApp } from "firebase-admin/app";
 import admin from "firebase-admin";
+import { getAuth } from "firebase-admin/auth";
 
 const secret = {
   type: process.env.TYPE,
@@ -32,3 +33,4 @@ export const firebase = !getApps().length
 
 // // Initialize Realtime Database and get a reference to the service
 export const database = getDatabase(firebase);
+export const auth = getAuth(firebase);
