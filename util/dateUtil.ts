@@ -1,5 +1,5 @@
 // date format : yyyy-MM-dd
-
+const week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 export const nextDate = (dateString: string) => {
   const date = new Date(Date.parse(dateString));
   date.setDate(date.getDate() + 1);
@@ -19,4 +19,9 @@ const dateToString = (date: Date) => {
   return `${year}-${month.toString().padStart(2, "0")}-${day
     .toString()
     .padStart(2, "0")}`;
+};
+
+export const dateStrToDay = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return week[date.getDay()];
 };
