@@ -118,7 +118,7 @@ const UserStats = (props: UserStatsProps) => {
   const iconColor = {
     morning: "#ED8936",
     noon: "#FAF089",
-    night: "#2C5282",
+    night: "#00BFFF",
   };
   return (
     <Link href={`/admin/${props.date}`}>
