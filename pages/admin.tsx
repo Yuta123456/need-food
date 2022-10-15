@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { atom, useRecoilState } from "recoil";
 import { dayCount } from "../util/schedule";
+import { dateStrToDay } from "../util/dateUtil";
 const Admin = () => {
   const [monitorUserDict, setMonitorUserDict] = useRecoilState(
     monitorUserScheduleState
@@ -117,7 +118,7 @@ const UserStats = (props: UserStatsProps) => {
   const iconColor = {
     morning: "#ED8936",
     noon: "#FAF089",
-    night: "#2C5282",
+    night: "#00BFFF",
   };
   return (
     <Link href={`/admin/${props.date}`}>
@@ -129,7 +130,9 @@ const UserStats = (props: UserStatsProps) => {
         paddingLeft="1rem"
       >
         <GridItem colSpan={2}>
-          <Text>{props.date}</Text>
+          <Text>
+            {props.date} ({dateStrToDay(props.date)})
+          </Text>
         </GridItem>
         <GridItem display="flex" alignItems="center">
           <Morning color={iconColor.morning} size="24" />
@@ -141,7 +144,7 @@ const UserStats = (props: UserStatsProps) => {
         </GridItem>
         <GridItem display="flex" alignItems="center">
           <Night color={iconColor.night} size="24" />
-          <Text pl="1rem">{props.dayMealCount.lunch}</Text>
+          <Text pl="1rem">{props.dayMealCount.dinner}</Text>
         </GridItem>
       </Grid>
     </Link>

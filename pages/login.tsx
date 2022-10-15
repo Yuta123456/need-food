@@ -1,4 +1,11 @@
-import { Center, Input, Button, Heading, Text } from "@chakra-ui/react";
+import {
+  Center,
+  Input,
+  Button,
+  Heading,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { FormControl, FormLabel } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -25,6 +32,7 @@ const createSession = (id: string) => {
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [user, setIsLogin] = useRecoilState(userState);
+  const toast = useToast();
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +47,7 @@ const Login = () => {
     if (!email || !password) {
       return;
     }
-    // TODO: ログインできなかった時、判断できない。
+    console.log("handle click");
     if (isRegister) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
@@ -48,18 +56,25 @@ const Login = () => {
           router.push("/");
         })
         .catch((err) => {
-          console.log("error", err);
+          toast({
+            title: "ログインに失敗しました",
+            status: "error",
+            duration: 2000,
+          });
         });
     } else {
       signInWithEmailAndPassword(auth, email, password)
-        .then(async (value) => {
-          const id = await value.user.getIdToken();
+        .then((value) => {
           setIsLogin({ uid: value.user.uid });
           value.user.getIdToken().then((id) => createSession(id));
           router.push("/");
         })
         .catch((err) => {
-          console.log("error", err);
+          toast({
+            title: "ログインに失敗しました",
+            status: "error",
+            duration: 2000,
+          });
         });
     }
   };

@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { auth as adminAuth } from "../firebaseAdmin";
 import nookies from "nookies";
 import { GetServerSideProps, NextPage } from "next";
+import { useToast } from "@chakra-ui/react";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
@@ -47,13 +48,10 @@ const Home: NextPage<{ uid: string }> = ({ uid }) => {
   }, [user]);
 
   useEffect(() => {
-    if (user === undefined) {
-      router.push("/login");
-    }
     if (isAdminUser) {
       router.push("/admin");
     }
-  }, [user, isAdminUser]);
+  }, [isAdminUser]);
   return (
     <>
       {mealSchedule !== null ? (
