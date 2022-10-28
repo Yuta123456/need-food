@@ -10,7 +10,7 @@ const Seo = ({ host }: SeoProps) => {
   const description =
     "家族のための食事スケジュール管理アプリです" || defaultDescription;
   const url = host || "";
-  const imgUrl = host + "/needFoodOgp.png";
+  const imgUrl = "https://" + host + "/needFoodOgp.png";
 
   return (
     <Head>
