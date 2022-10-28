@@ -4,13 +4,8 @@ import type { AppProps } from "next/app";
 // pages/_app.js
 import { ChakraProvider, ThemeProvider } from "@chakra-ui/react";
 import React from "react";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { RecoilRoot } from "recoil";
+import Seo from "../components/Seo";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

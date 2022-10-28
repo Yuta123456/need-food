@@ -8,13 +8,14 @@ import { useRouter } from "next/router";
 import { auth as adminAuth } from "../firebaseAdmin";
 import nookies from "nookies";
 import { GetServerSideProps, NextPage } from "next";
-import { useToast } from "@chakra-ui/react";
+import Seo from "../components/Seo";
+
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
   });
 
-const Home: NextPage<{ uid: string }> = ({ uid }) => {
+const Home: NextPage<{ uid: string; host: string }> = ({ uid, host }) => {
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [user, setUser] = useRecoilState(userState);
   const [isAdminUser, setIsAdminUser] = useState(false);
@@ -57,6 +58,7 @@ const Home: NextPage<{ uid: string }> = ({ uid }) => {
       {mealSchedule !== null ? (
         <>
           <Header mealSchedule={mealSchedule} />
+          <Seo host={host} />
           <MealCheckboxGroup
             mealSchedule={mealSchedule}
             setMealSchedule={setMealSchedule}
@@ -103,6 +105,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       uid: user.uid,
+      host: ctx.req.headers.host || null,
     },
   };
 };

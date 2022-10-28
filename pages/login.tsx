@@ -19,7 +19,8 @@ import { useRouter } from "next/router.js";
 import { auth as adminAuth } from "../firebaseAdmin";
 import { auth } from "../FirebaseConfig";
 import nookies, { parseCookies } from "nookies";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, NextPage } from "next";
+import Seo from "../components/Seo";
 
 const createSession = (id: string) => {
   fetch("/api/v1/login/createSession", {
@@ -29,7 +30,7 @@ const createSession = (id: string) => {
     console.log(err);
   });
 };
-const Login = () => {
+const Login: NextPage<{ host: string }> = ({ host }) => {
   const [isRegister, setIsRegister] = useState(false);
   const [user, setIsLogin] = useRecoilState(userState);
   const toast = useToast();
@@ -82,46 +83,56 @@ const Login = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Center bg="teal.300" width={"100vw"} height={"100vh"}>
-      {/* <Text color="white">Login</Text> */}
-      <Center bg="teal.300" flexFlow={"column"}>
-        <Heading color="white">{isRegister ? "Register" : "Login"}</Heading>
-        <FormControl>
-          <FormLabel color="white">Email address</FormLabel>
-          <Input
-            type="email"
-            placeholder="example@hoge.com"
-            isRequired
-            id="email"
-            ref={emailRef}
-            color="White"
-          />
-          <FormLabel color="white">Password</FormLabel>
-          <Input
-            type="password"
-            id="password"
-            isRequired
-            ref={passwordRef}
-            color="White"
-          />
-          <Button mt={4} onClick={handleSubmit}>
-            Login
-          </Button>
-          <Text color="white" mt="4">
-            <button
-              onClick={() => {
-                setIsRegister(!isRegister);
-              }}
-            >
-              {isRegister
-                ? "or you already registered ?"
-                : "Not yet registered ?"}
-            </button>
-          </Text>
-        </FormControl>
+    <>
+      <Seo host={host} />
+      <Center bg="teal.300" width={"100vw"} height={"100vh"}>
+        {/* <Text color="white">Login</Text> */}
+        <Center bg="teal.300" flexFlow={"column"}>
+          <Heading color="white">{isRegister ? "Register" : "Login"}</Heading>
+          <FormControl>
+            <FormLabel color="white">Email address</FormLabel>
+            <Input
+              type="email"
+              placeholder="example@hoge.com"
+              isRequired
+              id="email"
+              ref={emailRef}
+              color="White"
+            />
+            <FormLabel color="white">Password</FormLabel>
+            <Input
+              type="password"
+              id="password"
+              isRequired
+              ref={passwordRef}
+              color="White"
+            />
+            <Button mt={4} onClick={handleSubmit}>
+              Login
+            </Button>
+            <Text color="white" mt="4">
+              <button
+                onClick={() => {
+                  setIsRegister(!isRegister);
+                }}
+              >
+                {isRegister
+                  ? "or you already registered ?"
+                  : "Not yet registered ?"}
+              </button>
+            </Text>
+          </FormControl>
+        </Center>
       </Center>
-    </Center>
+    </>
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  return {
+    props: {
+      host: ctx.req.headers.host || null,
+    },
+  };
+};
 export default Login;
