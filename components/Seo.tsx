@@ -25,6 +25,9 @@ const Seo = ({ host }: SeoProps) => {
       <meta property="og:image" content={imgUrl} />
       <meta property="og:image:width" content={String(1200)} />
       <meta property="og:image:height" content={String(630)} />
+      <meta name="theme-color" content="#4FD1C5" />
+      <link rel="manifest" href="/manifest.webmanifest" />
+      <link rel="apple-touch-icon" href="/icon-192x192.png" />
       <link rel="canonical" href={url} />
     </Head>
   );
