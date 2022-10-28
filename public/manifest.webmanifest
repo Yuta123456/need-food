@@ -1,7 +1,7 @@
 {
     "theme_color": "#4FD1C5",
     "background_color": "#4FD1C5",
-    "display": "browser",
+    "display": "standalone",
     "scope": "/",
     "start_url": "/",
     "name": "need food",
