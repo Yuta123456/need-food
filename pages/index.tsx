@@ -34,7 +34,7 @@ const Home: NextPage<{ uid: string }> = ({ uid }) => {
     })
       .then(async (res) => {
         const mealJson = await res.json();
-        // setMealSchedule(mealJson.mealSchedule);
+        setMealSchedule(mealJson.mealSchedule);
       })
       .catch((err) => {
         console.log(err);
