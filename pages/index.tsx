@@ -14,7 +14,7 @@ const fetcher = (url: string) =>
     return res.json();
   });
 
-const Home: NextPage<{ uid: string; host: string }> = ({ uid, host }) => {
+const Home: NextPage<{ uid: string }> = ({ uid }) => {
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [user, setUser] = useRecoilState(userState);
   const [isAdminUser, setIsAdminUser] = useState(false);
