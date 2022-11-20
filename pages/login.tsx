@@ -15,12 +15,12 @@ import {
 } from "firebase/auth";
 import { userState } from "./index";
 import { useRecoilState } from "recoil";
-import { useRouter } from "next/router.js";
+import { useRouter } from "next/router";
 import { auth } from "../FirebaseConfig";
 import { NextPage } from "next";
 
 const createSession = (id: string) => {
-  fetch("/api/v1/login/createSession", {
+  return fetch("/api/v1/login/createSession", {
     method: "POST",
     body: JSON.stringify({ id }),
   }).catch((err) => {
@@ -50,8 +50,12 @@ const Login: NextPage = () => {
       createUserWithEmailAndPassword(auth, email, password)
         .then((value) => {
           setIsLogin({ uid: value.user.uid });
-          value.user.getIdToken().then((id) => createSession(id));
-          router.push("/");
+          value.user
+            .getIdToken()
+            .then((id) => createSession(id))
+            .then(() => {
+              router.push("/");
+            });
         })
         .catch((err) => {
           toast({
@@ -64,8 +68,12 @@ const Login: NextPage = () => {
       signInWithEmailAndPassword(auth, email, password)
         .then((value) => {
           setIsLogin({ uid: value.user.uid });
-          value.user.getIdToken().then((id) => createSession(id));
-          router.push("/");
+          value.user
+            .getIdToken()
+            .then((id) => createSession(id))
+            .then(() => {
+              router.push("/");
+            });
         })
         .catch((err) => {
           toast({

@@ -8,13 +8,14 @@ import { useRouter } from "next/router";
 import { auth as adminAuth } from "../firebaseAdmin";
 import nookies from "nookies";
 import { GetServerSideProps, NextPage } from "next";
-
+import { Center, Spinner } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
     return res.json();
   });
 
-const Home: NextPage<{ uid: string; host: string }> = ({ uid, host }) => {
+const Home: NextPage<{ uid: string }> = ({ uid }) => {
   const [mealSchedule, setMealSchedule] = useState<MealSchedule | null>(null);
   const [user, setUser] = useRecoilState(userState);
   const [isAdminUser, setIsAdminUser] = useState(false);
@@ -63,7 +64,18 @@ const Home: NextPage<{ uid: string; host: string }> = ({ uid, host }) => {
           />
         </>
       ) : (
-        <p>loading...</p>
+        <Center h="100vh" color="white" sx={{ "flex-flow": "column" }}>
+          <Text color="#4FD1C5" fontSize="3xl">
+            loading...
+          </Text>
+          <Spinner
+            size="xl"
+            speed="1.0s"
+            color="#4FD1C5"
+            emptyColor="gray.200"
+            thickness="4px"
+          />
+        </Center>
       )}
     </>
   );
