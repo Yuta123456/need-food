@@ -16,11 +16,8 @@ import {
 import { userState } from "./index";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router.js";
-import { auth as adminAuth } from "../firebaseAdmin";
 import { auth } from "../FirebaseConfig";
-import nookies, { parseCookies } from "nookies";
-import { GetServerSideProps, NextPage } from "next";
-import Seo from "../components/Seo";
+import { NextPage } from "next";
 
 const createSession = (id: string) => {
   fetch("/api/v1/login/createSession", {
@@ -30,7 +27,7 @@ const createSession = (id: string) => {
     console.log(err);
   });
 };
-const Login: NextPage<{ host: string }> = ({ host }) => {
+const Login: NextPage = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [user, setIsLogin] = useRecoilState(userState);
   const toast = useToast();
@@ -84,7 +81,6 @@ const Login: NextPage<{ host: string }> = ({ host }) => {
 
   return (
     <>
-      <Seo host={host} />
       <Center bg="teal.300" width={"100vw"} height={"100vh"}>
         {/* <Text color="white">Login</Text> */}
         <Center bg="teal.300" flexFlow={"column"}>
@@ -128,11 +124,4 @@ const Login: NextPage<{ host: string }> = ({ host }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return {
-    props: {
-      host: ctx.req.headers.host || null,
-    },
-  };
-};
 export default Login;
